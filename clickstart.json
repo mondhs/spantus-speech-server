@@ -1,9 +1,9 @@
 {
-  "id": "spantus-speech-service",
-  "name": "Spantus Speech Service",
+  "id": "spantus-speech-server",
+  "name": "Spantus Speech Server",
   "description": "Provides Speech Corpus registry and additional capabilities",
-  "source": "git://github.com/CloudBees-community/java-rest-backbone.git",
-  "doc-url": "https://github.com/CloudBees-community/java-rest-backbone/blob/master/README.md",
+  "source": "git://github.com/mondhs/spantus-speech-server.git",
+  "doc-url": "https://github.com/mondhs/spantus-speech-server",
   "icon": "https://d3ko533tu1ozfq.cloudfront.net/clickstart/backbone_icon.png",
   "app-package": "https://s3.amazonaws.com/cloudbees-downloads/clickstart/java-rest-backbone-0.0.1-SNAPSHOT.war",
   "supported-by": "cloudbees",
