@@ -1,0 +1,44 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Recognition</title>
+
+<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script
+	src="http://spantusspeech-2.spantus.cloudbees.net/js/libs/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js"></script>
+
+<script src="http://spantusspeech-2.spantus.cloudbees.net/js/libs/recorder/recorder.js"></script>
+<script src="http://spantusspeech-2.spantus.cloudbees.net/js/libs/recorder/recognitionManager.js"></script>
+
+<script>
+	$(function() {
+
+		var recognitionManager = new RecognitionManager();
+		
+		recognitionManager.changeRecognitionUrl("http://spantusspeech-2.spantus.cloudbees.net/api/recognize/stream/lt_robotas/suk kairėn");
+		
+		$("#initRecording").click(function() {
+			recognitionManager.prepareRecording();
+		});
+		$("#startRecording").click(function() {
+			recognitionManager.startRecording();
+		});
+		$("#stopRecording").click(function() {
+			recognitionManager.stopRecording();
+		});
+
+	});
+</script>
+</head>
+<body>
+
+	<a id="initRecording" href="#">Prepare Recording</a>
+	<a id="startRecording" href="#">Start Recording</a>
+	<a id="stopRecording" href="#">Stop Recording</a>
+	<div id="recognitionResults"></div>
+
+
+</body>
+</html>

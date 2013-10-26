@@ -1,0 +1,104 @@
+<form class="form" role="form">
+	<div class="control-group">
+		<div class="controls form-inline">
+			<label for="entryId" class="control-label">Entry ID</label> <span
+				class="form-control-static" id="entryId">{{entry.id}}</span> <label
+				for="created" class="control-label">Created On</label> <span
+				class="form-control-static" id="created">{{entry.created|
+				date:'medium'}}</span> <label for="fileSize" class="control-label">File
+				Size</label> <span id="fileSize">{{entry.fileSize}}</span>
+
+		</div>
+		<div class="controls form-inline">
+			<label for="sampleRate" class="control-label">Sample Rate</label> <span
+				class="form-control-static" id="sampleRate">{{entry.sampleRate}}</span>
+			<label for="sampleSizeInBits" class="control-label">Sample
+				Size In Bits</label> <span class="form-control-static" id="sampleSizeInBits">{{entry.sampleSizeInBits}}</span>
+			<label for="channels" class="control-label">Channels</label> <span
+				class="form-control-static" id="channels">{{entry.channels}}</span>
+			<label for="lengthInSec" class="control-label">Length In Sec</label>
+			<span class="form-control-static" id="lengthInSec">{{entry.lengthInSec}}</span>
+		</div>
+		<div class="controls form-inline">
+			<label for="autoTranscript" class="control-label">Auto Transcript</label>
+			<span class="form-control-static" id="autoTranscript">{{entry.autoTranscript}}</span>
+			<label for="grammar" class="control-label">Grammar</label> <span
+				class="form-control-static" id="grammar">{{entry.grammar}}</span>
+		</div>
+
+	</div>
+	<div class="control-group">
+		<label for="entryId" class="control-label">File Name</label> <span
+			class="form-control-static" id="entryId"> <a
+			class="btn btn-lg" href="/api/corpus/entry/{{entry.id}}/stream"><span
+				class="glyphicon glyphicon-download-alt"></span></a>
+		</span>
+		<div ng-show="collapsedPlayer">
+			<audio id="audioPlayback" controls="controls" preload="none">
+				<source ng-src='{{audioUrl}}' type="audio/wav"></source>
+			</audio>
+		</div>
+
+	</div>
+
+
+	<div class="control-group">
+		<label for="manualTranscript" class="control-label">Manual Transcript</label>
+		<div class="">
+			<input type="text" ng-model="entry.manualTranscript" size="30"
+				id="manualTranscript" placeholder="add new entry here"
+				class="form-control col-lg-2" />
+		</div>
+	</div>
+
+
+	<div class="control-group">
+		<div class="col-lg-offset-2 col-lg-10">
+			<button class="btn btn-primary" ng-click="updateEntry()">
+				<span class="glyphicon glyphicon-ok-sign"></span> Update
+			</button>
+			<button class="btn" ng-click="playRecord()">
+				<span class="glyphicon glyphicon-play"></span> Play
+			</button>
+			<button class="btn" ng-click="collapsedPlayer=!collapsedPlayer">
+				<span class="glyphicon glyphicon-bullhorn"></span> Player
+			</button>
+			<button class="btn"
+				ng-click="collapsedRecognition=!collapsedRecognition">
+				<span class="glyphicon glyphicon-cog"></span> Recognition
+			</button>
+
+			<button class="btn btn-danger" ng-click="deleteRecord()">
+				<span class="glyphicon glyphicon-trash"></span> Delete
+			</button>
+		</div>
+
+	</div>
+
+	<div class="control-group">
+		<div class="controls form-inline" ng-show="collapsedRecognition">
+			<label for="recognition" class="control-label">Recognition by
+				Grammar</label> <select ng-model="grammaSelected"
+				ng-options="n for n in availableGrammas" class="form-control">
+			</select>
+			<button class="btn" type="submit" ng-click="recognizeSound()">
+				<span class="glyphicon glyphicon-cog"></span>Recognize
+			</button>
+			<span id="message">{{message}}</span>
+			<ul>
+				<li ng-repeat="result in recognitionResult"><a
+					ng-click="updateManualTranscript(result.bestFinalResultNoFiller)">{{result.bestFinalResultNoFiller}}</a>
+					- {{result.bestPronunciationResult}}
+					<ul>
+						<li>entryScore: {{result.entryScore}}; acousticScore:
+							{{result.acousticScore}}; languageScore:
+							{{result.languageScore}}; insertionScore:
+							{{result.insertionScore}}</li>
+						<li ng-repeat="word in result.recognitionWords"><span>{{word.pronunciation}}
+								- [{{word.startFrame}};{{word.endFrame}}]</span></li>
+					</ul></li>
+			</ul>
+		</div>
+	</div>
+
+</form>

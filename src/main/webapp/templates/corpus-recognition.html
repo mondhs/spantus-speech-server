@@ -1,0 +1,58 @@
+<div id="corpusRobotCtrlContainer">
+
+	<div class="panel panel-default">
+		<!-- Default panel contents -->
+		<div class="panel-heading">Recognition</div>
+		<!-- 
+		<form class="form" role="form">
+			<div class="form-group">
+				<label for="recognition" class="col-lg-2 control-label">Recognition
+					by Grammar</label>
+				<div class="col-lg-10">
+					<select ng-model="grammaSelected"
+						ng-options="n for n in availableGrammas"
+						class="form-control col-lg-2">
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<button class="btn btn-primary" ng-click="initRecording();"
+					ng-class="{down:'enabled', recording:'disabled', waiting:'disabled', '':'enabled'}[state]">init</button>
+				<button class="btn" ng-click="startRecording();"
+					ng-class="{waiting:'enabled', recording:'disabled', 'down':'hidden'}[state]">record</button>
+				<button class="btn" ng-click="stopRecording();"
+					ng-class="{waiting:'disabled', recording:'enabled', 'down':'hidden'}[state]">stop</button>
+				<span id="message">{{message}}</span>
+			</div>
+		</form>
+ -->
+		<form class="form" role="form">
+			<div class="form-group">
+				<label for="transcribe" class="control-label">Say phrase</label> <span
+					class="form-control-static" id="transcribe">{{phrase.transcribe}}</span>
+			</div>
+			<div class="form-group">
+				<button class="btn" ng-click="startRecording();"
+					ng-class="{waiting:'enabled', recording:'disabled', 'down':'hidden'}[state]">record</button>
+				<button class="btn" ng-click="stopRecording();"
+					ng-class="{waiting:'disabled', recording:'enabled', 'down':'hidden'}[state]">stop</button>
+				<span id="message">{{message}}</span>
+			</div>
+		</form>
+
+		<ul>
+			<li ng-repeat="result in recognitionResult">Recognized:
+				{{result.bestFinalResultNoFiller}}
+				<ul>
+					<li ng-repeat="word in result.recognitionWords"><span>{{word.pronunciation}}
+							- [{{word.startFrame}};{{word.endFrame}}]</span></li>
+				</ul>
+			</li>
+		</ul>
+
+
+	</div>
+
+
+
+</div>

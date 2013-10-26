@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<cloudbees-web-app xmlns="http://www.cloudbees.com/xml/webapp/1">
+
+	<context-param>
+		<param-name>test</param-name>
+		<param-value>var</param-value>
+	</context-param>
+
+	<environment name="local">
+		<context-param>
+			<param-name>mode</param-name>
+			<param-value></param-value>
+		</context-param>
+	</environment>
+	<environment name="mongo">
+		<context-param>
+			<param-name>mode</param-name>
+			<param-value>mongo</param-value>
+		</context-param>
+	</environment>
+</cloudbees-web-app>

@@ -1,0 +1,199 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Recognition</title>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet"
+	href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+
+
+
+
+</head>
+<body>
+	<div class="jumbotron">
+		<div class="container">
+			<div class="panel panel-default" id="recognitionConrtols">
+				<div class="panel-heading">
+					Atpažintuvas</span>
+				</div>
+				<div class="panel-body">
+					<div id="holdAndSay" class="btn btn-lg btn-danger btn-block">
+						<span class="glyphicon glyphicon-record"></span> Nuspausk ir
+						Sakyk: <strong><span id="phraseText"></span></strong>
+					</div>
+
+				</div>
+			</div>
+			<div class="panel panel-default" id="recognitionResults">
+				<div class="panel-heading">
+						<span class="label label-default" id="recognzerStatusContainer">Būsena: <span id="recognzerStatus">Šyla</span></span> 
+						<span class="label label-default" id="recognzerGrammarContainer">Gramatika: <span id="recognzerGrammar">-</span></span> 
+						<span class="label label-default" id="recognzerErrorContainer">Klaidos: <span id="recognzerError">-</span>%</span> 
+						<span class="label label-default" id="recognitionResultContainer">Atpažinta: <span id="recognitionResult">-</span></span>  
+						
+				</div>
+				<div class="progress">
+					<div class="progress-bar progress-bar-success" id="successProgress" style="width: 100%">
+					</div>
+					<div class="progress-bar progress-bar-danger" id="failureProgress" style="width: 0%">
+					</div>
+				</div>
+
+
+				<div id="recognitionResults">
+					<ul id="recognitionResultsList"></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="recognizerMessages"></div>
+
+
+
+
+	<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script
+		src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+	<script
+		src="http://localhost:8080/js/libs/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js"></script>
+	<script src="http://localhost:8080/js/libs/recorder/recorder.js"></script>
+	<script
+		src="http://localhost:8080/js/libs/recorder/recognitionManager.js"></script>
+	<script>
+		$(function() {
+			var recognitionCtx = {
+				recognitionErrors : 0,
+				recognitionTotal : 0
+			};
+			var recognitionManager = new RecognitionManager();
+			var recogniserServerUrl = "http://localhost:8080/api/recognize";
+			//recognitionManager.setRecognitionUrl("http://spantusspeech-2.spantus.cloudbees.net/api/recognize/stream/lt_robotas/suk kairėn");
+			
+			recognitionManager.setRecognitionUrl(recogniserServerUrl
+					+ "/stream/lt_robotas/-");
+			
+			recognitionManager
+					.changeCallbacks({
+						"onError" : function(msg) {
+							console.log("Error " + msg);
+							addMessages("Klaida: " + msg);
+						},
+						"onPrepared" : function() {
+							console.log("Prepared");
+							$("#holdAndSay").show();
+							addMessages("Užsikūrė. Pasiruošęs klausyti");
+							retrievePhrase();
+						},
+						"onStartRecording" : function() {
+							console.log("Start recording");
+							addMessages("Pradėtas klausymas");
+						},
+						"onStopRecording" : function() {
+							console.log("Strop recording");
+							addMessages("Nutrauktas klausymas");
+						},
+						"onSendForRecognition" : function() {
+							console.log("Send for recognition");
+							addMessages("Siunčiama atpažinimui");
+						},
+						"onRecognitionResults" : function(data) {
+							console.log("Recognition result");
+							addMessages(" Pasiruošęs klausyti. ");
+							var transcribe = recognitionCtx.transcribe;
+							var grammar = recognitionCtx.grammar;
+							var icon = "ok";
+							var style = "success";
+							recognitionCtx.recognitionTotal += 1;
+							if (transcribe === data.result) {
+								icon = "ok"
+								style="success"
+							} else {
+								recognitionCtx.recognitionErrors += 1;
+								icon = "remove";
+								style="danger"
+							}
+							var errorRatio = Math.round((recognitionCtx.recognitionErrors
+									/ recognitionCtx.recognitionTotal)*100);
+							$("#successProgress").width((100-errorRatio) + "%");
+							$("#failureProgress").width(errorRatio+ "%");
+							$("#recognzerError").text(errorRatio);
+							$("#recognitionResult").text(data.result);
+							$("#recognitionResult").text(data.result);
+							$('ul').prepend(
+									'<li><span class="label label-'+style+'"><span class="glyphicon glyphicon-'+icon+'-circle"></span></span>'
+											+  "Tikėtasi: " + transcribe
+											+ "; Atpažinta: " + data.result +" (Gramatika: " + grammar +')</li>');
+							retrievePhrase();
+						}
+					});
+			///////////////////////////////////////////
+			////init
+			$("#holdAndSay").hide();
+			recognitionManager.prepareRecording();
+			///////////////////////////////////////////
+
+			//handle events
+
+			$("#holdAndSay").mousedown(function() {
+				console.log("mousedown");
+				recognitionManager.startRecording();
+			}).mouseup(function() {
+				console.log("mouseup");
+				recognitionManager.stopRecording();
+			});
+
+			function retrievePhrase() {
+				$.ajax({
+					url : recogniserServerUrl + "/phrase",
+					cache : false,
+					async : false,
+					contentType : false,
+					crossDomain : true,
+					xhrFields : {
+						withCredentials : true
+					},
+					processData : false,
+					type : 'GET',
+					success : function(data) {
+						recognitionCtx.transcribe = data.transcribe;
+						recognitionCtx.grammar = data.grammar;
+						$('#phraseText').text(recognitionCtx.transcribe);
+						$('#recognzerGrammar').text(recognitionCtx.grammar);
+						recognitionManager
+								.setRecognitionUrl(recogniserServerUrl
+										+ "/stream/" + data.grammar + "/"
+										+ data.transcribe);
+						console.log("Retrieved: " + JSON.stringify(data));
+					}
+				});
+
+			}
+
+			function addMessages(msg) {
+				$("#recognzerStatus").text(msg);
+				$("<span class='alert alert-success'>" + msg + "</span>")
+						.appendTo(
+								$('#recognizerMessages')
+										.children("span.js_msg").remove().end())
+						.each(function() {
+							var self = $(this);
+							setTimeout(function() {
+								self.fadeOut(500, function() {
+									self.remove();
+								});
+							}, 3000);
+						});
+			}
+		});
+	</script>
+</body>
+</html>

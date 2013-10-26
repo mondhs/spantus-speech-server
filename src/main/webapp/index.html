@@ -1,0 +1,91 @@
+<!doctype html>
+<html ng-app="CorpusApp">
+<head>
+<title>Spantus Corpus - {{pageTitle}}</title>
+<meta name="viewport" content="width=device-width, initial-scale=.5">
+
+<script src="/js/libs/jquery/1.7.1/jquery-min.js"></script>
+<!-- angular -->
+<script src="/js/libs/angular/1.2.0-rc.3/angular.min.js"></script>
+<script src="/js/libs/angular/1.2.0-rc.3/angular-route.min.js"></script>
+<script type="text/javascript"
+	src="/js/libs/angular/1.2.0-rc.3/angular-animate.min.js"></script> 
+<!-- /angular -->
+
+<!-- bootstrap -->
+<script src="/js/libs/ui-bootstrap-0.6.0.min.js"></script>
+<link rel="stylesheet" href="/css/bootstrap/3.0.0/css/bootstrap.min.css">
+<script src="/js/libs/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<!-- /bootstrap -->
+
+<!-- record -->
+<!-- http://cwilso.github.io/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js -->
+<script
+	src="/js/libs/AudioContext-MonkeyPatch/AudioContextMonkeyPatch.js"></script>
+<script src="./js/libs/recorder/recorder.js"></script>
+<!-- /record -->
+
+<link rel="stylesheet" href="./css/corpus.css">
+
+<!-- app.js -->
+<script src="./js/corpus-app.js"></script>
+<script src="./js/google-analytics.js"></script>
+<!-- main -->
+<script src="./js/corpus-list.js"></script>
+<!-- controler -->
+<script src="./js/corpus-detail.js"></script>
+<!-- controler -->
+<script src="./js/corpus-record.js"></script>
+<!-- controler -->
+<script src="./js/corpus-recognition.js"></script>
+<!-- controler -->
+<script src="./js/corpus-service.js"></script>
+<!-- services -->
+<script src="./js/grammar-util.js"></script>
+<!-- services -->
+<script src="./js/corpus-login.js"></script>
+
+<!-- controler -->
+
+
+</head>
+<body>
+	<div id="myApp" ng-controller="CorpusGlobalCtrl">
+		<div class="container">
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#/">Spantus</a>
+				</div>
+				<div class="collapse navbar-collapse navbar-ex1-collapse">
+					<ul class="nav navbar-nav">
+						<li
+							ng-class="{active: isGlobalLocationPath('/corpus') || startsGlobalLocationPath('/corpus')}"><a
+							href="#/"><span class="glyphicon glyphicon-book"></span>
+								Corpus</a></li>
+						<li ng-class="{active: isGlobalLocationPath('/record')}"><a
+							href="#/record"><span class="glyphicon glyphicon-comment"></span>
+								Record</a></li>
+						<li ng-class="{active: isGlobalLocationPath('/grammar')}"><a
+							href="#/grammar"><span class="glyphicon glyphicon-font"></span>
+								Grammar</a></li>
+						<li ng-class="{active: isGlobalLocationPath('/recognition')}"><a
+							href="#/recognition"><span
+								class="glyphicon glyphicon-certificate"></span> Recognition</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown"><a href="#" class="dropdown-toggle"
+							data-toggle="dropdown"> <span
+								class="glyphicon glyphicon-user"></span> {{globalUser.userName}}<b class="caret">
+						</a></b>
+							<ul class="dropdown-menu">
+								<li><a href="#" ng-click="globalLogout()">Logout</a></li>
+							</ul></li>
+					</ul>
+				</div>
+
+			</nav>
+			<ng-view></ng-view>
+		</div>
+	</div>
+</body>
+</html>
