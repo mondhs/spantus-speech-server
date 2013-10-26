@@ -29,10 +29,11 @@ public class GuiceRestConfig extends GuiceServletContextListener {
     private AbstractModule loadDictionaryModule() {
         String mode = this.sc.getInitParameter("mode");
         sc.log("Application mode: " + mode);
-        if (mode != null && mode.equals("mongo")) {
-            return new CorpusModuleMongo();
+        if (mode != null && mode.equals("local")) {
+        	return new CorpusLocalModule();
         } else {
-            return new CorpusLocalModule();
+        	return new CorpusModuleMongo();
+            
         }
     }
 }
