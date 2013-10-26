@@ -20,29 +20,30 @@
 			<span class="form-control-static" id="lengthInSec">{{entry.lengthInSec}}</span>
 		</div>
 		<div class="controls form-inline">
-			<label for="autoTranscript" class="control-label">Auto Transcript</label>
-			<span class="form-control-static" id="autoTranscript">{{entry.autoTranscript}}</span>
+
 			<label for="grammar" class="control-label">Grammar</label> <span
 				class="form-control-static" id="grammar">{{entry.grammar}}</span>
+			
+	
+	
+			<label for="entryId" class="control-label">File Name</label> <span
+				class="form-control-static" id="entryId"> <a
+				class="btn btn-lg" href="/api/corpus/entry/{{entry.id}}/stream"><span
+					class="glyphicon glyphicon-download-alt"></span></a>
+			</span>
+			<div ng-show="collapsedPlayer">
+				<audio id="audioPlayback" controls="controls" preload="none">
+					<source ng-src='{{audioUrl}}' type="audio/wav"></source>
+				</audio>
+			</div>
 		</div>
 
 	</div>
-	<div class="control-group">
-		<label for="entryId" class="control-label">File Name</label> <span
-			class="form-control-static" id="entryId"> <a
-			class="btn btn-lg" href="/api/corpus/entry/{{entry.id}}/stream"><span
-				class="glyphicon glyphicon-download-alt"></span></a>
-		</span>
-		<div ng-show="collapsedPlayer">
-			<audio id="audioPlayback" controls="controls" preload="none">
-				<source ng-src='{{audioUrl}}' type="audio/wav"></source>
-			</audio>
-		</div>
-
-	</div>
 
 
 	<div class="control-group">
+		<label for="autoTranscript" class="control-label">Auto Transcript</label>
+		<span class="form-control-static" id="autoTranscript">{{entry.autoTranscript}}</span>
 		<label for="manualTranscript" class="control-label">Manual Transcript</label>
 		<div class="">
 			<input type="text" ng-model="entry.manualTranscript" size="30"

@@ -41,11 +41,16 @@
 		</form>
 
 		<ul>
-			<li ng-repeat="result in recognitionResult">Recognized:
-				{{result.bestFinalResultNoFiller}}
+			
+			<li ng-repeat="result in recognitionResult">Recognized <strong>{{result.recognition.result}}</strong> for <strong>{{result.phrase}}</strong> 
 				<ul>
-					<li ng-repeat="word in result.recognitionWords"><span>{{word.pronunciation}}
-							- [{{word.startFrame}};{{word.endFrame}}]</span></li>
+					<li ng-repeat="resultItem in result.recognition.resultItems">
+							<ul> 
+								<li ng-repeat="word in resultItem.recognitionWords">
+								<span>{{word.pronunciation}}
+								 - [{{word.startFrame}};{{word.endFrame}}]</span></li>
+							</ul>
+					</li>
 				</ul>
 			</li>
 		</ul>

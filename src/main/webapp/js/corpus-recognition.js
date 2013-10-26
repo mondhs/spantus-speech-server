@@ -19,6 +19,7 @@ function CorpusRecognitionCtrl($scope, $location, $http) {
 		$http.get('/api/recognize/phrase').success(function(data) {
 			$scope.previousPhrase = $scope.phrase; 
 			$scope.phrase = data;
+			console.log('Phrase: ' + $scope.phrase );
 		});
 	} 
 
@@ -111,11 +112,10 @@ function CorpusRecognitionCtrl($scope, $location, $http) {
 			transformRequest : angular.identity
 		}).success(function(data, status, headers, config) {
 			console.log("success data.manualTranscript: " + data.result);
-//			if($scope.recognitionResult == null){
-//				$scope.recognitionResult = data.resultItems;	
-//			}else{
-				$scope.recognitionResult.splice(0, 0, data.resultItems);
-//			}
+			//$.each( data.resultItems, function( i, resultItem ){
+			//	$scope.recognitionResult.unshift(resultItem);	
+			//});
+			$scope.recognitionResult.unshift({phrase:$scope.phrase.transcribe, recognition:data});
 			$scope.message = "Ready. Click record to start recognition.";
 			console.log("Retrieved: "+data.resultItems.length);
 			$scope.fetchNextPhrase();

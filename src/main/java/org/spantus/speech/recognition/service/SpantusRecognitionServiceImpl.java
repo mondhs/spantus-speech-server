@@ -130,7 +130,7 @@ public class SpantusRecognitionServiceImpl {
 			resultWord.setScore(word.getScore());
 			resultWord.setStartFrame(word.getStartFrame());
 			resultWord.setEndFrame(word.getEndFrame());
-			resultWord.setPronunciation(word.getPronunciation().toDetailedString());
+			resultWord.setPronunciation(word.getPronunciation().toString());
 			item.getRecognitionWords().add(resultWord);
 		}
 		
